@@ -148,12 +148,12 @@ async function addHabit() {
 // Marcar/desmarcar día
 async function toggleDay(habitId, date) {
     // Verificar si ya está completado
-    const { data: existing } = await db
+    const { data: existing, error: checkError } = await db
         .from('completions')
         .select('id')
         .eq('habit_id', habitId)
         .eq('completed_date', date)
-        .single();
+        .maybeSingle();
 
     if (existing) {
         // Si existe, eliminarlo
