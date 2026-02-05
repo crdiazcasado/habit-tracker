@@ -1,5 +1,6 @@
 const SUPABASE_URL = 'https://xtpfxjxdohzzlxjimmxx.supabase.co';  
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0cGZ4anhkb2h6emx4amltbXh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMjU5ODUsImV4cCI6MjA4NTkwMTk4NX0.USIwuWlORdSg3x5qahNM7mmSJ1VGFBFPbrmNTTgkRy8';
+
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Función para cargar todos los hábitos
@@ -68,7 +69,8 @@ async function renderHabit(habit) {
         
         weekHTML += `
             <div class="day-box ${isCompleted ? 'completed' : ''}" 
-                 onclick="toggleDay('${habit.id}', '${dateStr}')">
+                 data-habit-id="${habit.id}" 
+                 data-date="${dateStr}">
                 <div class="day-name">${dayName}</div>
                 <div class="day-number">${dayNumber}</div>
             </div>
@@ -84,7 +86,7 @@ async function renderHabit(habit) {
         <div class="week-grid">
             ${weekHTML}
         </div>
-        <button class="delete-btn" onclick="deleteHabit('${habit.id}')">Eliminar</button>
+        <button class="delete-btn" data-habit-id="${habit.id}">Eliminar</button>
     `;
     
     habitsList.appendChild(habitCard);
@@ -185,6 +187,40 @@ async function deleteHabit(habitId) {
     }
 
     loadHabits();
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Botón de añadir hábito
+    document.getElementById('addHabitBtn').addEventListener('click', addHabit);
+    
+    // Enter en el input
+    document.getElementById('habitName').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            addHabit();
+        }
+    });
+    
+    // Delegación de eventos para los días y botones de eliminar
+    document.getElementById('habitsList').addEventListener('click', function(e) {
+        // Si es un día
+        if (e.target.closest('.day-box')) {
+            const dayBox = e.target.closest('.day-box');
+            const habitId = dayBox.dataset.habitId;
+            const date = dayBox.dataset.date;
+            toggleDay(habitId, date);
+        }
+        
+        // Si es botón de eliminar
+        if (e.target.classList.contains('delete-btn')) {
+            const habitId = e.target.dataset.habitId;
+            deleteHabit(habitId);
+        }
+    });
+    
+    // Cargar hábitos al inicio
+    loadHabits();
+});
 }
 
 // Cargar hábitos al inicio
