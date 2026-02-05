@@ -221,7 +221,3 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cargar hábitos al inicio
     loadHabits();
 });
-}
-
-// Cargar hábitos al inicio
-loadHabits();
