@@ -10,6 +10,8 @@ body {
     min-height: 100vh;
     padding: 0;
     color: #e6e6e6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
@@ -19,7 +21,7 @@ body {
 }
 
 header {
-    margin-bottom: 48px;
+    margin-bottom: 40px;
 }
 
 header h1 {
@@ -46,13 +48,14 @@ header h1 {
 
 .add-habit input[type="text"] {
     flex: 1;
-    padding: 10px 12px;
+    padding: 12px;
     border: none;
     border-radius: 6px;
     font-size: 15px;
     background: #2a2a2a;
     color: #e6e6e6;
     transition: background 0.2s;
+    min-width: 0;
 }
 
 .add-habit input[type="text"]:focus {
@@ -71,6 +74,7 @@ header h1 {
     border-radius: 6px;
     cursor: pointer;
     background: #2a2a2a;
+    flex-shrink: 0;
 }
 
 .add-habit button {
@@ -84,10 +88,15 @@ header h1 {
     cursor: pointer;
     transition: background 0.2s;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .add-habit button:hover {
     background: #e6e6e6;
+}
+
+.add-habit button:active {
+    transform: scale(0.98);
 }
 
 .habit-card {
@@ -122,6 +131,7 @@ header h1 {
     font-weight: 600;
     color: #ffffff;
     letter-spacing: -0.01em;
+    word-break: break-word;
 }
 
 .streak {
@@ -132,6 +142,8 @@ header h1 {
     font-weight: 500;
     font-size: 0.875em;
     border: 1px solid rgba(251, 191, 36, 0.3);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .week-grid {
@@ -152,12 +164,18 @@ header h1 {
     cursor: pointer;
     transition: all 0.15s ease;
     background: #191919;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .day-box:hover {
     border-color: #3f3f3f;
     background: #252525;
     transform: translateY(-1px);
+}
+
+.day-box:active {
+    transform: translateY(0);
 }
 
 .day-box.completed {
@@ -198,6 +216,7 @@ header h1 {
     font-weight: 500;
     transition: all 0.2s;
     margin: 0 24px 20px 24px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .delete-btn:hover {
@@ -205,32 +224,151 @@ header h1 {
     border-color: #ef4444;
 }
 
+.delete-btn:active {
+    transform: scale(0.98);
+}
+
 .loading {
     text-align: center;
     color: #7c7c7c;
     font-size: 1em;
-    padding: 40px;
+    padding: 40px 20px;
 }
 
-/* Responsive */
+/* Tablet */
 @media (max-width: 768px) {
     .container {
-        padding: 40px 20px;
+        padding: 40px 24px;
+    }
+    
+    header {
+        margin-bottom: 32px;
     }
     
     header h1 {
         font-size: 2em;
     }
     
+    .habit-header {
+        padding: 16px 20px;
+        gap: 12px;
+    }
+    
+    .habit-header h3 {
+        font-size: 1em;
+    }
+    
+    .streak {
+        font-size: 0.8em;
+        padding: 3px 8px;
+    }
+    
+    .week-grid {
+        padding: 0 20px 16px 20px;
+        gap: 6px;
+    }
+    
+    .delete-btn {
+        margin: 0 20px 16px 20px;
+    }
+}
+
+/* Móvil */
+@media (max-width: 480px) {
+    .container {
+        padding: 24px 16px;
+    }
+    
+    header {
+        margin-bottom: 24px;
+    }
+    
+    header h1 {
+        font-size: 1.75em;
+    }
+    
     .add-habit {
+        padding: 12px;
+        gap: 8px;
         flex-wrap: wrap;
     }
     
     .add-habit input[type="text"] {
         width: 100%;
+        font-size: 16px; /* Evita zoom en iOS */
+        padding: 12px;
+    }
+    
+    .add-habit input[type="color"] {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .add-habit button {
+        flex: 1;
+        padding: 12px 16px;
+        font-size: 15px;
+    }
+    
+    .habit-card {
+        margin-bottom: 12px;
+    }
+    
+    .habit-header {
+        padding: 14px 16px;
+        gap: 10px;
+        border-left-width: 3px;
+    }
+    
+    .habit-header h3 {
+        font-size: 0.95em;
+    }
+    
+    .streak {
+        font-size: 0.75em;
+        padding: 3px 7px;
     }
     
     .week-grid {
-        gap: 6px;
+        padding: 0 16px 12px 16px;
+        gap: 5px;
+    }
+    
+    .day-box {
+        border-radius: 6px;
+    }
+    
+    .day-name {
+        font-size: 0.65em;
+        margin-bottom: 1px;
+    }
+    
+    .day-number {
+        font-size: 1em;
+    }
+    
+    .delete-btn {
+        margin: 0 16px 12px 16px;
+        font-size: 0.8em;
+        padding: 10px 14px;
+    }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 360px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+    
+    .week-grid {
+        gap: 4px;
+    }
+    
+    .day-name {
+        font-size: 0.6em;
+    }
+    
+    .day-number {
+        font-size: 0.9em;
     }
 }
