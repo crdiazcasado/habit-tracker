@@ -77,8 +77,8 @@ async function renderHabit(habit) {
         `;
     }
     
-    habitCard.innerHTML = `
-        <div class="habit-header">
+habitCard.innerHTML = `
+        <div class="habit-header" style="border-left-color: ${habit.color}">
             <div class="habit-color" style="background: ${habit.color}"></div>
             <h3>${habit.name}</h3>
             <div class="streak">🔥 ${streak} días</div>
@@ -88,6 +88,14 @@ async function renderHabit(habit) {
         </div>
         <button class="delete-btn" data-habit-id="${habit.id}">Eliminar</button>
     `;
+    
+    // Aplicar color a los días completados
+    const dayBoxes = habitCard.querySelectorAll('.day-box.completed');
+    dayBoxes.forEach(box => {
+        box.style.borderColor = habit.color;
+        box.style.backgroundColor = `${habit.color}20`;
+        box.style.color = habit.color;
+    });
     
     habitsList.appendChild(habitCard);
 }
