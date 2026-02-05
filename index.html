@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Tracker de Hábitos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Mis Hábitos</h1>
+        </header>
+
+        <!-- Formulario para crear nuevo hábito -->
+        <div class="add-habit">
+            <input type="text" id="habitName" placeholder="Nuevo hábito (ej: Diseñar 30 min)">
+            <input type="color" id="habitColor" value="#3B82F6">
+            <button onclick="addHabit()">+ Añadir</button>
+        </div>
+
+        <!-- Lista de hábitos -->
+        <div id="habitsList"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+</body>
+</html>
