@@ -1,14 +1,14 @@
 const SUPABASE_URL = 'https://xtpfxjxdohzzlxjimmxx.supabase.co';  
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0cGZ4anhkb2h6emx4amltbXh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMjU5ODUsImV4cCI6MjA4NTkwMTk4NX0.USIwuWlORdSg3x5qahNM7mmSJ1VGFBFPbrmNTTgkRy8';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Función para cargar todos los hábitos
 async function loadHabits() {
     const habitsList = document.getElementById('habitsList');
     habitsList.innerHTML = '<div class="loading">Cargando hábitos...</div>';
 
-    const { data: habits, error } = await supabase
+    const { data: habits, error } = await db
         .from('habits')
         .select('*')
         .order('created_at', { ascending: false });
@@ -40,7 +40,7 @@ async function renderHabit(habit) {
     const sevenDaysAgo = new Date(today);
     sevenDaysAgo.setDate(today.getDate() - 6);
     
-    const { data: completions } = await supabase
+    const { data: completions } = await db
         .from('completions')
         .select('completed_date')
         .eq('habit_id', habit.id)
@@ -94,7 +94,7 @@ async function renderHabit(habit) {
 
 // Calcular racha (días consecutivos hasta hoy)
 async function calculateStreak(habitId) {
-    const { data: completions } = await supabase
+    const { data: completions } = await db
         .from('completions')
         .select('completed_date')
         .eq('habit_id', habitId)
@@ -131,7 +131,7 @@ async function addHabit() {
         return;
     }
 
-    const { error } = await supabase
+    const { error } = await db
         .from('habits')
         .insert([{ name, color }]);
 
@@ -148,7 +148,7 @@ async function addHabit() {
 // Marcar/desmarcar día
 async function toggleDay(habitId, date) {
     // Verificar si ya está completado
-    const { data: existing } = await supabase
+    const { data: existing } = await db
         .from('completions')
         .select('id')
         .eq('habit_id', habitId)
@@ -157,13 +157,13 @@ async function toggleDay(habitId, date) {
 
     if (existing) {
         // Si existe, eliminarlo
-        await supabase
+        await db
             .from('completions')
             .delete()
             .eq('id', existing.id);
     } else {
         // Si no existe, crearlo
-        await supabase
+        await db
             .from('completions')
             .insert([{ habit_id: habitId, completed_date: date }]);
     }
@@ -175,7 +175,7 @@ async function toggleDay(habitId, date) {
 async function deleteHabit(habitId) {
     if (!confirm('¿Segura que quieres eliminar este hábito?')) return;
 
-    const { error } = await supabase
+    const { error } = await db
         .from('habits')
         .delete()
         .eq('id', habitId);
